@@ -1,5 +1,4 @@
 import db from "../models/index"
-import jwt from 'jsonwebtoken'
 require("dotenv").config()
 const Role = db.Role
 

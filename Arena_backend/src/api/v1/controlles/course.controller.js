@@ -1,17 +1,7 @@
-import db from '../models/index'
 import courseController from "../services/course.services"
-import jwt from 'jsonwebtoken'
-import cookieParser from 'cookie-parser'
-import user from '../models/user'
-import {
-    where
-} from 'sequelize'
 require("dotenv").config()
-
 //create new course 
-
 let create = async (req, res, next) => {
-
     let data = req.body
     // check valid
     if (!data.name || !data.desc) {

@@ -1,11 +1,4 @@
-import db from '../models/index'
 import lessonService from "../services/lesson.services"
-import jwt from 'jsonwebtoken'
-import cookieParser from 'cookie-parser'
-import user from '../models/user'
-import {
-    where
-} from 'sequelize'
 require("dotenv").config()
 
 //create new lesson

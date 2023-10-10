@@ -1,5 +1,3 @@
-import express from 'express';
-import jwt from 'jsonwebtoken'
 import userService from "../services/user.services";
 require("dotenv").config()
 

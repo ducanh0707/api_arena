@@ -1,6 +1,3 @@
-// const {
-//     User
-// } = require("../models/User")
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'

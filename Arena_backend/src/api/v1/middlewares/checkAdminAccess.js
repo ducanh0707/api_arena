@@ -9,7 +9,9 @@ const checkAdminAccess = (req, res, next) => {
     } else {
         // Người dùng không có quyền admin, từ chối truy cập
         res.status(403).json({
-            message: 'Không có quyền truy cập'
+            status: 5,
+            message: "Invalid token",
+            data: null
         });
     }
 };
