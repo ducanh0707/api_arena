@@ -22,18 +22,21 @@ let newCourse = (data) => {
                 if (newCourse) {
                     resolve({
                         status: 0,
-                        message: "Success"
+                        message: "Success",
+                        data: newCourse
                     })
                 } else {
                     resolve({
                         status: 1,
-                        message: "Fail"
+                        message: "Fail",
+                        data: null
                     })
                 }
             } else {
                 resolve({
                     status: 1,
-                    message: "Fail"
+                    message: "Fail",
+                    data: null
                 })
             }
         } catch (error) {
@@ -54,7 +57,8 @@ let allCourse = (data) => {
             } else {
                 resolve({
                     status: 2,
-                    message: "Data not found"
+                    message: "Data not found",
+                    data: null
                 })
             }
 

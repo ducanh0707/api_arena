@@ -10,7 +10,8 @@ const authenticateJWT = (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
             status: 5,
-            message: "Invalid token"
+            message: "Invalid token",
+            data: null
         });
     }
 
@@ -19,7 +20,8 @@ const authenticateJWT = (req, res, next) => {
         if (err) {
             return res.status(403).json({
                 status: 5,
-                message: "Invalid token"
+                message: "Invalid token",
+                data: null
             });
         }
         req.user = user;

@@ -3,7 +3,7 @@ require("dotenv").config()
 
 const checkAdminAccess = (req, res, next) => {
     // console.log(req.user.id_role)
-    if (req.user && req.user.id_role == '0') {
+    if (req.user && req.user.id_role == '1') {
         // Người dùng có quyền admin, cho phép tiếp tục
         next();
     } else {

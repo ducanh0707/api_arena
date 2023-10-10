@@ -57,7 +57,7 @@ let register = (data) => {
                 let newUser = await db.User.create({
                     username: data.username,
                     email: data.email,
-                    id_role: 1,
+                    id_role: 3,
                     id_organization: 0,
                     status: 1,
                     totalPass: 0,

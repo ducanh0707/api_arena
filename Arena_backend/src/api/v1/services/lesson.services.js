@@ -11,8 +11,8 @@ let newLesson = (data) => {
                 where: {
                     name: data.name
                 },
-                attributes: ['name'],
-                raw: false
+                // attributes: ['name'],
+                raw: true
             })
             if (!lesson) {
                 let newLesson = await db.Lesson.create({
@@ -21,30 +21,37 @@ let newLesson = (data) => {
                     key: data.key,
                     point: data.point,
                     id_course: data.id_course,
+                    // CourseId: lesson.id,
                     status: 1,
                 })
                 if (newLesson) {
                     resolve({
                         status: 0,
-                        message: "Success"
+                        message: "Success",
+                        data: newLesson
                     })
                 } else {
                     resolve({
                         status: 1,
-                        message: "Fail"
+                        message: "Fail",
+                        data: null
+
                     })
                 }
             } else {
                 resolve({
                     status: 1,
-                    message: "Fail"
+                    message: "Fail",
+                    data: null
+
                 })
             }
         } catch (error) {
             reject({
                 status: 6,
                 message: "Internal Server",
-                message: error.message
+                data: null
+
             })
         }
     })
@@ -52,10 +59,7 @@ let newLesson = (data) => {
 let allLesson = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(data)
-
             let lesson = await db.Lesson.findAll();
-            console.log(1)
             if (lesson.length > 0) {
                 resolve({
                     status: 0,
@@ -65,14 +69,18 @@ let allLesson = (data) => {
             } else {
                 resolve({
                     status: 2,
-                    message: "Data not found"
+                    message: "Data not found",
+                    data: null
+
                 })
             }
 
         } catch (error) {
             reject({
                 status: 6,
-                message: "Internal Server"
+                message: "Internal Server",
+                data: null
+
             })
         }
     });
@@ -84,7 +92,7 @@ let update = (lessonId, data) => {
                 where: {
                     id: lessonId
                 },
-                raw: false
+                raw: true
             })
             await lesson.update({
                 name: data.name,
@@ -99,7 +107,9 @@ let update = (lessonId, data) => {
         } catch (error) {
             reject({
                 status: 6,
-                message: "Internal Server"
+                message: "Internal Server",
+                data: null
+
             })
         }
     })
@@ -112,7 +122,7 @@ let deleteLesson = (lessonId) => {
                 where: {
                     id: lessonId
                 },
-                raw: false
+                raw: true
             });
             resolve({
                 status: 0,
@@ -121,7 +131,9 @@ let deleteLesson = (lessonId) => {
         } catch (error) {
             reject({
                 status: 6,
-                message: "Internal Server"
+                message: "Internal Server",
+                data: null
+
             })
         }
     })

@@ -15,8 +15,8 @@ let create = async (req, res, next) => {
     }
     try {
         const role = await roleController.newRole(data);
+        // next()
         res.status(201).json(role);
-        next()
     } catch (error) {
         res.status(401).json({
             status: 6,
@@ -28,7 +28,7 @@ let create = async (req, res, next) => {
 let listRole = async (req, res, next) => {
     try {
         let data = await roleController.allRole(data)
-        next();
+        // next();
         res.status(200).json(data);
 
     } catch (e) {
@@ -44,7 +44,7 @@ let updateRole = async (req, res, next) => {
         const roleId = req.params.id;
         const data = req.body;
         let newData = await roleController.update(roleId, data)
-        next();
+        // next();
         res.status(200).json(newData);
 
     } catch (e) {
@@ -59,9 +59,9 @@ let deleterole = async (req, res, next) => {
     try {
         const roleId = req.params.id;
         let newData = await roleController.deleteRole(roleId)
-        next();
+        // next();
 
-        return res.status(200).json(newData);
+        res.status(200).json(newData);
 
     } catch (e) {
         res.status(500).json({

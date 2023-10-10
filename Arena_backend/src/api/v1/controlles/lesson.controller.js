@@ -18,17 +18,19 @@ let create = async (req, res, next) => {
         return res.status(400).json({
             status: 4,
             message: "invalid input datatype",
+            data: null
+
         });
     }
     try {
         const lesson = await lessonService.newLesson(data);
         res.status(201).json(lesson);
-        next()
+        // next()
     } catch (error) {
         res.status(401).json({
             status: 6,
-            message: "Internal Server1",
-            message: error.message
+            message: "Internal Server",
+            data: null
 
         });
     }
@@ -37,7 +39,7 @@ let create = async (req, res, next) => {
 let listLesson = async (req, res, next) => {
     try {
         let data = await lessonService.allLesson(data)
-        next();
+        // next();
         res.status(200).json(data);
 
     } catch (e) {
@@ -53,7 +55,7 @@ let updateLesson = async (req, res, next) => {
         const lessonId = req.params.id;
         const data = req.body;
         let newData = await lessonService.update(lessonId, data)
-        next();
+        // next();
         res.status(200).json(newData);
 
     } catch (e) {
@@ -68,9 +70,9 @@ let deleteLesson = async (req, res, next) => {
     try {
         const lessonId = req.params.id;
         let newData = await lessonService.deleteLesson(lessonId)
-        next();
+        // next();
 
-        return res.status(200).json(newData);
+        res.status(200).json(newData);
 
     } catch (e) {
         res.status(500).json({

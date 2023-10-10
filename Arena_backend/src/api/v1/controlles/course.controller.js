@@ -23,7 +23,7 @@ let create = async (req, res, next) => {
     try {
         const course = await courseController.newCourse(data);
         res.status(201).json(course);
-        next()
+        // next()
     } catch (error) {
         res.status(401).json({
             status: 6,
@@ -35,8 +35,8 @@ let create = async (req, res, next) => {
 let listCourse = async (req, res, next) => {
     try {
         let data = await courseController.allCourse(data)
-        next();
         res.status(200).json(data);
+        // next();
 
     } catch (e) {
         res.status(500).json({
@@ -51,13 +51,14 @@ let updateCourse = async (req, res, next) => {
         const courseId = req.params.id;
         const data = req.body;
         let newData = await courseController.update(courseId, data)
-        next();
         res.status(200).json(newData);
+        // next();
 
     } catch (e) {
         res.status(500).json({
             status: 6,
-            message: "Internal Server"
+            message: "Internal Server",
+            data: null
         })
     }
 }
@@ -66,9 +67,9 @@ let deleteCourse = async (req, res, next) => {
     try {
         const courseId = req.params.id;
         let newData = await courseController.deleteCourse(courseId)
-        next();
 
-        return res.status(200).json(newData);
+        res.status(200).json(newData);
+        // next();
 
     } catch (e) {
         res.status(500).json({

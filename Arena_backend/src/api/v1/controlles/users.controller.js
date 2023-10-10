@@ -24,7 +24,7 @@ let signUp = async (req, res, next) => {
     try {
         const newUser = await userService.register(data);
         res.status(201).json(newUser);
-        next();
+        // next();
     } catch (error) {
         res.status(400).json({
             message: error
