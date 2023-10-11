@@ -40,43 +40,47 @@ let register = (data) => {
                     status: 4,
                     message: "invalid input datatype",
                 })
-            }
-            // check user tồn tại 
-            let existingUser = await User.findOne({
-                // attributes: ['id', 'username', 'email', 'password', 'id_role', 'id_organization', 'status', 'totalPass', 'createdAt', 'updatedAt'],
-                where: {
-                    email: data.email
-                },
-                raw: false
-            })
-            let passwordhash = await hashPassword(data.password)
-            if (!existingUser) {
-                let newUser = await db.User.create({
-                    username: data.username,
-                    email: data.email,
-                    id_role: 3,
-                    id_organization: 0,
-                    status: 1,
-                    totalPass: 0,
-                    password: passwordhash
+            } else {
+                let existingUser = await User.findOne({
+                    // attributes: ['id', 'username', 'email', 'password', 'id_role', 'id_organization', 'status', 'totalPass', 'createdAt', 'updatedAt'],
+                    where: {
+                        email: data.email
+                    },
+                    raw: false
                 })
-                if (newUser) {
-                    resolve({
-                        status: 0,
-                        message: "Success"
+                let passwordhash = await hashPassword(data.password)
+                if (!existingUser) {
+
+                    let newUser = await db.User.create({
+                        username: data.username,
+                        email: data.email,
+                        id_role: 3,
+                        id_organization: 0,
+                        status: 1,
+                        totalPass: 0,
+                        password: passwordhash
                     })
+
+                    if (newUser) {
+                        resolve({
+                            status: 0,
+                            message: "Success"
+                        })
+                    } else {
+                        resolve({
+                            status: 1,
+                            message: "Fail"
+                        })
+                    }
                 } else {
                     resolve({
-                        status: 1,
-                        message: "Fail"
+                        status: 4,
+                        message: "invalid input datatype",
                     })
                 }
-            } else {
-                resolve({
-                    status: 1,
-                    message: "Fail"
-                })
             }
+            // check user tồn tại 
+
         } catch (error) {
             reject(error)
         }
@@ -93,35 +97,77 @@ const generateJWTToken = (userId, idRole, status) => {
     });
 };
 // logIn
-let logIn = async (data) => {
-    try {
-        const user = await User.findOne({
-            where: {
-                // attributes: ['id', 'username', 'email', 'password', 'id_role', 'id_organization', 'status', 'totalPass', 'createdAt', 'updatedAt'],
-                email: data.email
-            },
-            raw: false
+// let logIn = async (data) => {
+//     try {
+//         const user = await User.findOne({
+//             where: {
+//                 email: data.email
+//             },
+//             raw: false
 
-        });
+//         });
 
 
-        if (!user || user.status == '0') {
-            throw new Error('Tài khoản không tồn tại');
+//         if (!user || user.status == '0') {
+//             throw new Error('Tài khoản không tồn tại');
+//         }
+//         const isPasswordValid = await bcrypt.compare(data.password, user.password);
+//         if (!isPasswordValid) {
+//             throw new Error('Mật khẩu không đúng');
+//         }
+
+//         const token = generateJWTToken(user.id, user.id_role, user.status);
+//         return {
+//             user,
+//             token
+//         };
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
+let logIn = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findOne({
+                where: {
+                    email: data.email
+                },
+                raw: false
+
+            });
+            const token = generateJWTToken(user.id, user.id_role, user.status);
+            const isPasswordValid = await bcrypt.compare(data.password, user.password);
+
+            if (!user || user.status == '0') {
+                resolve({
+                    status: 1,
+                    message: "Fail",
+                    data: null
+                });
+            } else if (!isPasswordValid) {
+                resolve({
+                    status: 1,
+                    message: "Fail",
+                    data: null
+                });
+            } else {
+                resolve({
+                    status: 0,
+                    message: "Success",
+                    user,
+                    token
+                });
+            }
+
+        } catch (error) {
+            reject({
+                status: 6,
+                message: "Internal Server"
+            })
         }
-        const isPasswordValid = await bcrypt.compare(data.password, user.password);
-        if (!isPasswordValid) {
-            throw new Error('Mật khẩu không đúng');
-        }
-
-        const token = generateJWTToken(user.id, user.id_role, user.status);
-        return {
-            user,
-            token
-        };
-    } catch (error) {
-        throw error;
-    }
-};
+    })
+}
 // getbyID
 let getUserById = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -132,13 +178,14 @@ let getUserById = (id) => {
             if (user) {
                 resolve({
                     status: 0,
-                    message: "Success1",
+                    message: "Success",
                     data: user
                 })
             } else {
                 resolve({
                     status: 2,
-                    message: "Data not found2"
+                    message: "Data not found",
+                    data: null
                 })
             }
         } catch (e) {

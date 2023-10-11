@@ -20,8 +20,8 @@ let initApiV1 = (app) => {
   router.put("/update/:userId", authenticateJWT, userController.update);
 
   // Sử dụng middleware authenticateJWT và checkAdminAccess
-  router.get("/test", authenticateJWT, userController.home);
+  router.get("/test", userController.home);
 
-  return app.use('/v1', router)
+  return app.use('/api/v1', router)
 }
 module.exports = initApiV1

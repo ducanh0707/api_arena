@@ -21,6 +21,6 @@ let initLessonV1 = (app) => {
   // Sử dụng middleware authenticateJWT và checkAdminAccess
   // router.get("/test", lessonController.home);
 
-  return app.use('/v1/Lesson/', router)
+  return app.use('/api/v1/Lesson/', router)
 }
 module.exports = initLessonV1

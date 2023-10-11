@@ -10,24 +10,22 @@ const isAdminOrSelf = (currentUser, targetUser) => {
 //register
 let signUp = async (req, res, next) => {
     // check input
-
     let data = req.body;
-    // console.log(data)
-    if (!data.username || !data.email || !data.password) {
-        return res.status(400).json({
-            status: 4,
-            message: "invalid input datatype",
-        });
-    }
     try {
+        if (!data.username || !data.email || !data.password) {
+            return res.status(400).json({
+                status: 4,
+                message: "invalid input datatype",
+            });
+        }
         const newUser = await userService.register(data);
         res.status(201).json(newUser);
         // next();
     } catch (error) {
         res.status(400).json({
-            message: error
+            status: 6,
+            message: "Internal Server"
         });
-        // return error
     }
 };
 let signIn = async (req, res, next) => {
@@ -47,12 +45,15 @@ let signIn = async (req, res, next) => {
         } = await userService.logIn(data);
         next()
         res.status(200).json({
-            user,
+            status: 0,
+            message: 'success',
+            data: user,
             token
         });
     } catch (error) {
         res.status(401).json({
-            message: error.message
+            status: 6,
+            message: "Internal Server"
         });
     }
 };

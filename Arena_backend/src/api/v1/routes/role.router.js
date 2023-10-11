@@ -21,6 +21,6 @@ let initRoleV1 = (app) => {
   // Sử dụng middleware authenticateJWT và checkAdminAccess
   router.get("/test", authenticateJWT, checkAdminAccess, roleController.home);
 
-  return app.use('/v1/role/', router)
+  return app.use('/api/v1/role/', router)
 }
 module.exports = initRoleV1
