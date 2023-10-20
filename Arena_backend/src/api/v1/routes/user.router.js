@@ -15,7 +15,7 @@ let initApiV1 = (app) => {
 
   router.get("/profile/:id", authenticateJWT, userController.profile);
 
-  router.get("/user", authenticateJWT, userController.allUser);
+  router.get("/user", authenticateJWT, checkAdminAccess, userController.allUser);
 
   router.put("/update/:userId", authenticateJWT, userController.update);
 

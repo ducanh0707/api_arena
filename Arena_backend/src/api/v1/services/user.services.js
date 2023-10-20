@@ -134,36 +134,27 @@ let logIn = (data) => {
                     email: data.email
                 },
                 raw: false
-
             });
             const token = generateJWTToken(user.id, user.id_role, user.status);
             const isPasswordValid = await bcrypt.compare(data.password, user.password);
-
-            if (!user || user.status == '0') {
-                resolve({
-                    status: 1,
-                    message: "Fail",
-                    data: null
-                });
-            } else if (!isPasswordValid) {
-                resolve({
+            if (!user || !isPasswordValid || user.status == '0') {
+                reject({
                     status: 1,
                     message: "Fail",
                     data: null
                 });
             } else {
                 resolve({
-                    status: 0,
-                    message: "Success",
                     user,
                     token
                 });
             }
 
+
         } catch (error) {
             reject({
                 status: 6,
-                message: "Internal Server"
+                message: "Internal Server2"
             })
         }
     })
@@ -172,9 +163,18 @@ let logIn = (data) => {
 let getUserById = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await User.findByPk(id)
+            // const user = await User.findByPk(id)
             // console.log(req.user)
+            const user = await User.findOne({
+                where: {
+                    id: id,
+                    attributes: {
+                        exclude: ['password'] // Loại trừ trường 'password'
+                    },
+                },
+                raw: true
 
+            });
             if (user) {
                 resolve({
                     status: 0,

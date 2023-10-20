@@ -24,7 +24,7 @@ let signUp = async (req, res, next) => {
     } catch (error) {
         res.status(400).json({
             status: 6,
-            message: "Internal Server"
+            message: "Internal Server1"
         });
     }
 };
@@ -43,17 +43,29 @@ let signIn = async (req, res, next) => {
             user,
             token
         } = await userService.logIn(data);
-        next()
-        res.status(200).json({
-            status: 0,
-            message: 'success',
-            data: user,
-            token
-        });
+        if (user) {
+            // console.log(12)
+            user.password = undefined;
+            res.status(200).json({
+                status: 0,
+                message: 'success',
+                data: user,
+                token
+            })
+        } else {
+            // console.log(user)
+            res.status(200).json({
+                status: 1,
+                message: 'Fail',
+                data: null,
+            })
+        }
+
     } catch (error) {
+
         res.status(401).json({
             status: 6,
-            message: "Internal Server"
+            message: "Internal Server",
         });
     }
 };
@@ -62,20 +74,21 @@ let profile = async (req, res, next) => {
     try {
         const id = parseInt(req.params.id);
         const valueUser = req.user
-        // console.log(valueUser)
+        console.log(valueUser)
         const user = await userService.getUserById(id);
-        if (user || valueUser.id_role == 0) {
-            return res.status(200).json(user);
-        }
-        next();
-        if (!user || valueUser.id != id) {
-            return res.status(404).json({
+        console.log(user)
+        if (valueUser.id != id) {
+            res.status(404).json({
                 status: 2,
                 message: "Data not found"
             });
+        } else if (valueUser.id_role == 1) {
+            res.status(200).json(user);
         }
-        next();
-        return res.status(200).json(user);
+        // next();
+
+        // next();
+        // res.status(200).json(user);
     } catch (error) {
         // console.error(error);
         res.status(500).json({
@@ -90,7 +103,7 @@ let allUser = async (req, res, next) => {
         const valueUser = req.user
         // console.log(valueUser.id_role)
         // console.log(valueUser.id)
-        if (valueUser.id_role === 0 && valueUser.id === 1) {
+        if (valueUser.id_role === 1 && valueUser.id === 1) {
             let data = await userService.allUser(data)
             next();
             return res.status(200).json(data);
